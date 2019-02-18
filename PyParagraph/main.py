@@ -23,7 +23,7 @@ with open(par1path, 'r') as par1pathtext:
     for word in par1list:
         wordlen.append(int(len(word)))
 
-    avgwordlen = sum(wordlen) / len(wordlen)
+    avgwordlen = round((sum(wordlen) / len(wordlen)), 2)
     
     
     #number of sentences
@@ -34,9 +34,10 @@ with open(par1path, 'r') as par1pathtext:
     #average sentence length
     sentlen = []
     for sentence in sentlist:
-        sentlen.append(int(len(sentence)))
+        sentlen.append(len(re.split("[, \-!?:<>()]+", sentence)))
     
-    avgsentlen = sum(sentlen) / len(sentlen)
+
+    avgsentlen = round((sum(sentlen) / len(sentlen)), 2)
    
     print('Paragraph Analysis')
     print('-----------------')
