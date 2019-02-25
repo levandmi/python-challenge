@@ -24,77 +24,45 @@ with open(electionpath, newline='') as electionfile:
 
     # individual candidates
     indcan = list(set(candidates))
-    #had to print to find the number of candidates.  Is there a way to create dictionaries with length of lists?
 
-    
+    #Dictoinary to create individual candidates with a 0 vote start
+    votedic = {}
+    for i in range(len(indcan)):
+        votedic.update({indcan[i]:0})
 
-    # votes per candidate
-    indcanvotedic = {indcan[0]:0, indcan[1]:0, indcan[2]:0, indcan[3]:0}
+    #Dictionary to track votes per individual candidate
+    for i in range(len(candidates)):
+        votedic[candidates[i]] += 1
 
-    for can in candidates:
-        if can == indcan[0]:
-            indcanvotedic[indcan[0]] +=1
-        elif can == indcan[1]:
-            indcanvotedic[indcan[1]] +=1
-        elif can == indcan[2]:
-            indcanvotedic[indcan[2]] +=1
-        elif can == indcan[3]:
-            indcanvotedic[indcan[3]] +=1
-    
-  
+    #dicitonary to get vote percentages
+    percentdic = {}
+    for i in range(len(indcan)):
+        percentdic[indcan[i]] =  round(((votedic[indcan[i]] / totalvotes) * 100), 2)
+       
+    #found function to get max vote key
+    winner_name = max(votedic, key=votedic.get)
 
-    #can I add this to the dictionary above?  number key for percentage?
-    #can I make a for loop that creates new variables each loop?
-    percent0 = round((indcanvotedic[indcan[0]] * 100 / totalvotes), 2)
-    percent1 = round((indcanvotedic[indcan[1]] * 100 / totalvotes), 2)
-    percent2 = round((indcanvotedic[indcan[2]] * 100 / totalvotes), 2)
-    percent3 = round((indcanvotedic[indcan[3]] * 100 / totalvotes), 2)
-
-
-    #this is tough to read.  I could put the dictionary values to individual variables after calculations in the foor loop.
-    #if I made new variables I'd have to add them if the candidate number changed.  Ask TAs.
-    winner = ''
-    if indcanvotedic[indcan[0]] > indcanvotedic[indcan[1]] and \
-    indcanvotedic[indcan[0]] > indcanvotedic[indcan[2]] and \
-    indcanvotedic[indcan[0]] > indcanvotedic[indcan[3]]:
-        winner = indcan[0] 
-    if indcanvotedic[indcan[1]] > indcanvotedic[indcan[0]] and \
-    indcanvotedic[indcan[1]] > indcanvotedic[indcan[2]] and \
-    indcanvotedic[indcan[1]] > indcanvotedic[indcan[3]]:
-        winner = indcan[1] 
-    if indcanvotedic[indcan[2]] > indcanvotedic[indcan[1]] and \
-    indcanvotedic[indcan[2]] > indcanvotedic[indcan[2]] and \
-    indcanvotedic[indcan[2]] > indcanvotedic[indcan[3]]:
-        winner = indcan[2]
-    if indcanvotedic[indcan[3]] > indcanvotedic[indcan[1]] and \
-    indcanvotedic[indcan[3]] > indcanvotedic[indcan[2]] and \
-    indcanvotedic[indcan[3]] > indcanvotedic[indcan[3]]:
-        winner = indcan[3]
-
-
+    #print results
     print('Election Results')
     print('-------------------------')
     print(f'Total Votes: {totalvotes}')
     print('-------------------------')
-    print(f'{indcan[0]}: {percent0}% ({indcanvotedic[indcan[0]]})')
-    print(f'{indcan[1]}: {percent1}% ({indcanvotedic[indcan[1]]})')
-    print(f'{indcan[2]}: {percent2}% ({indcanvotedic[indcan[2]]})')
-    print(f'{indcan[3]}: {percent3}% ({indcanvotedic[indcan[3]]})')
+    for i in range(len(indcan)):
+        print(f'{indcan[i]}: {percentdic[indcan[i]]}% ({votedic[indcan[i]]})')
     print('-------------------------')
-    print(f'winner: {winner}')
+    print(f'winner: {winner_name}')
     print('-------------------------')
 
+    #print to text.
     output_path = os.path.join('pypolloutput.txt')
     with open(output_path, 'w', newline='') as outputfile:
         
-        outputfile.writelines('Election Results')
-        outputfile.writelines('-------------------------')
-        outputfile.writelines(f'Total Votes: {totalvotes}')
-        outputfile.writelines('-------------------------')
-        outputfile.writelines(f'{indcan[0]}: {percent0}% ({indcanvotedic[indcan[0]]})')
-        outputfile.writelines(f'{indcan[1]}: {percent1}% ({indcanvotedic[indcan[1]]})')
-        outputfile.writelines(f'{indcan[2]}: {percent2}% ({indcanvotedic[indcan[2]]})')
-        outputfile.writelines(f'{indcan[3]}: {percent3}% ({indcanvotedic[indcan[3]]})')
-        outputfile.writelines('-------------------------')
-        outputfile.writelines(f'winner: {winner}')
-        outputfile.writelines('-------------------------')
+        outputfile.writelines('Election Results\n')
+        outputfile.writelines('-------------------------\n')
+        outputfile.writelines(f'Total Votes: {totalvotes}\n')
+        outputfile.writelines('-------------------------\n')
+        for i in range(len(indcan)):
+            outputfile.writelines(f'{indcan[i]}: {percentdic[indcan[i]]}% ({votedic[indcan[i]]})\n')
+        outputfile.writelines('-------------------------\n')
+        outputfile.writelines(f'winner: {winner_name}\n')
+        outputfile.writelines('-------------------------\n')
